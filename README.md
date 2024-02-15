@@ -1,5 +1,7 @@
 # SOEN342-Project
 ## Team Members
-* Joseph Pagliuca - 40092947 (Otterboi)
-* Kevin Phan - 40097439 (kevphn)
-* Minh Duc Vu - 40166824 (MinhDuc1711)
+| Name | ID | Email | Section | GitHub Username |
+| ---- | -- | ----- | ------- | --------------- |
+| Joseph Pagliuca | 40092947 | joe_sep98@hotmail.com | GG | Otterboi |
+| Kevin Phan | 40097439 | EMAIL HERE | GG | kevphn |
+| Minh Duc Vu | 40166824 | EMAIL HERE | SECTION HERE | MinhDuc1711 |
