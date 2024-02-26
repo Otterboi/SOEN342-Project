@@ -1,6 +1,6 @@
 package users;
 
-public class SystemAdmin {
+public class SystemAdmin extends User{
 	public SystemAdmin()
 	{
 		super();
