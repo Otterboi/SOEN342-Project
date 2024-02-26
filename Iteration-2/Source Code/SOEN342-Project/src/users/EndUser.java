@@ -21,6 +21,7 @@ public class EndUser extends User {
 	{
 		return this.isRegistered;
 	}
+
 	public void setIsRegistered(boolean isRegistered)
 	{
 		this.isRegistered = isRegistered;
