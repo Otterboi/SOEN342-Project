@@ -31,7 +31,7 @@ public class User {
 	{
 		return password;
 	}
-	public void setUsername(String username);
+	public void setUsername(String username)
 	{
 		this.username = username;
 	}

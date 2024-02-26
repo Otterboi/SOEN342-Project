@@ -1,11 +1,13 @@
 package users;
 
+import flights.Airline;
+
 public class AirlineAdmin extends User {
 	private Airline airline;
 	public AirlineAdmin()
 	{
-		airline = new Airline();
 		super();
+		airline = new Airline();
 	}
 	public AirlineAdmin(String username, String password, Airline airline)
 	{

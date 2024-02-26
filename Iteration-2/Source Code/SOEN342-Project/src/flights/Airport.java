@@ -23,7 +23,26 @@ public class Airport {
         this.listOfFlights = listOfFlights;
     }
 
+    public Airport(Airport airport){
+        this.name = airport.getName();
+        this.code = airport.getCode();
+        this.city = airport.getCity();
+        this.listOfFlights = airport.getFlights();
+    }
+
     public List<Flight> getFlights(){
         return this.listOfFlights;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String getCode(){
+        return this.code;
+    }
+
+    public City getCity(){
+        return this.city;
     }
 }

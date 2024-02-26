@@ -9,13 +9,13 @@ public class EndUser extends User {
 	}
 	public EndUser(String username, String password, boolean isRegistered)
 	{
-		this.isRegistered = isRegistered;
 		super(username, password);
+		this.isRegistered = isRegistered;
 	}
 	public EndUser(EndUser endUser)
 	{
-		this.isRegistered = endUser.getIsRegistered();
 		super(endUser.getUsername(), endUser.getPassword());
+		this.isRegistered = endUser.getIsRegistered();
 	}
 	public boolean getIsRegistered()
 	{

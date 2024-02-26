@@ -17,6 +17,11 @@ public class Airline {
         this.listOfFlights = listOfFlights;
     }
 
+    public Airline(Airline airline){
+        this.listOfAircrafts = airline.getListOfAircrafts();
+        this.listOfFlights = airline.getListOfFlights();
+    }
+
     public List<Aircraft> getListOfAircrafts(){
         return this.listOfAircrafts;
     }
