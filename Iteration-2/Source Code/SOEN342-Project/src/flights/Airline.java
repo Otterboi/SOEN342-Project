@@ -1,32 +1,27 @@
 package flights;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Airline {
-    private List<Aircraft> listOfAircrafts;
-    private List<Flight> listOfFlights;
+
+    private String name;
 
     public Airline(){
-        this.listOfAircrafts = new ArrayList<Aircraft>();
-        this.listOfFlights = new ArrayList<Flight>();
+        this.name = "";
     }
 
-    public Airline(ArrayList<Aircraft> listOfAircrafts, ArrayList<Flight> listOfFlights){
-        this.listOfAircrafts = listOfAircrafts;
-        this.listOfFlights = listOfFlights;
+    public Airline(String name){
+        this.name = name;
     }
 
     public Airline(Airline airline){
-        this.listOfAircrafts = airline.getListOfAircrafts();
-        this.listOfFlights = airline.getListOfFlights();
+        this.name = airline.getName();
     }
 
-    public List<Aircraft> getListOfAircrafts(){
-        return this.listOfAircrafts;
+    public String getName()
+    {
+        return this.name;
     }
-
-    public List<Flight> getListOfFlights(){
-        return this.listOfFlights;
+    
+    public void setName(String name){
+        this.name = name;
     }
 }
