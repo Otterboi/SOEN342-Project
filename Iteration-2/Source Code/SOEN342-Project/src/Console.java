@@ -74,6 +74,8 @@ public class Console {
         }else if (option == 2){
 
         }
+
+        kb.close();
     }
 
     private static ArrayList<Flight> getFlights(String source, String destination){
@@ -90,7 +92,7 @@ public class Console {
         for(Flight flight: foundFlights){
             if(user instanceof AirportAdmin){
                 if(flight.getAircraft().getIsPrivate()){
-                    if((flight.getSource().getCode().equals(((AirportAdmin) user).getAirport().getCode())) || (flight.getDestination().getCode().equals(((AirportAdmin) user).getAirport()))){
+                    if((flight.getSource().getCode().equals(((AirportAdmin) user).getAirport().getCode())) || (flight.getDestination().getCode().equals(((AirportAdmin) user).getAirport().getCode()))){
                         System.out.println("AIRPORT ADMIN PRIVATE: " + flight.toString());
                     }
                 }else{
