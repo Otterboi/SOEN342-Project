@@ -24,4 +24,8 @@ public class Aircraft {
     public String getStatus(){
         return this.status;
     }
+
+    public String getIdentifier(){
+        return this.identifier;
+    }
 }

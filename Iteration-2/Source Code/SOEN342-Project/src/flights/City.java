@@ -16,4 +16,17 @@ public class City {
         this.country = country;
         this.temperature = temperature;
     }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
 }
