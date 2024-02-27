@@ -39,9 +39,5 @@ public class User {
 	{
 		this.password = password;
 	}
-	public void displayFlights()
-	{
-		System.out.println("List of flights");
-	}
 
 }
