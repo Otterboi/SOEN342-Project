@@ -7,6 +7,7 @@ public class Airport {
     private String name;
     private String code;
     private City city;
+    private List<Aircraft> fleet;
 
     public Airport(){
         this.name = "";
@@ -18,12 +19,14 @@ public class Airport {
         this.name = name;
         this.code = code;
         this.city = city;
+        this.fleet = new ArrayList<>();
     }
 
     public Airport(Airport airport){
         this.name = airport.getName();
         this.code = airport.getCode();
         this.city = airport.getCity();
+        this.fleet = airport.getFleet();
     }
 
     public String getName(){
@@ -36,5 +39,17 @@ public class Airport {
 
     public City getCity(){
         return this.city;
+    }
+
+    public void addAircraftToFleet(Aircraft aircraft){
+        this.fleet.add(aircraft);
+    }
+
+    public List<Aircraft> getFleet() {
+        return fleet;
+    }
+
+    public void setFleet(List<Aircraft> fleet) {
+        this.fleet = fleet;
     }
 }
