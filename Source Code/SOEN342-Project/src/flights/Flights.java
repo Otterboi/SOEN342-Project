@@ -48,6 +48,7 @@ public class Flights {
                 if(airline.getFleet().contains(aircraft)){
                     newFlight.setAircraft(aircraft);
                     source.getFleet().remove(aircraft);
+                    break;
                 }
             }
         }else if (user instanceof AirportAdmin){
@@ -56,6 +57,7 @@ public class Flights {
                     newFlight.setAirline(new Airline("Private Airline"));
                     newFlight.setAircraft(aircraft);
                     source.getFleet().remove(aircraft);
+                    break;
                 }
             }
         }
