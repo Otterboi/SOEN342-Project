@@ -12,7 +12,7 @@ public class AirlineAdmin extends User {
 	public AirlineAdmin(String username, String password, Airline airline)
 	{
 		super (username, password);
-		this.airline = new Airline(airline);
+		this.airline = airline;
 	}
 	public AirlineAdmin(AirlineAdmin airlineAdmin)
 	{

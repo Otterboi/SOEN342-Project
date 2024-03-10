@@ -49,12 +49,64 @@ public class Flight {
         return this.source;
     }
 
+    public void setSource(Airport source) {this.source = source;}
+
     public Airport getDestination(){
         return this.destination;
     }
 
+    public void setDestination(Airport destination) {this.destination = destination;}
+
     public Aircraft getAircraft(){
         return this.aircraft;
+    }
+
+    public String getNumber() { return this.number;}
+
+    public void setNumber(String number) { this.number = number;}
+
+    public String getScheduledDepartTime() {
+        return scheduledDepartTime;
+    }
+
+    public void setScheduledDepartTime(String scheduledDepartTime) {
+        this.scheduledDepartTime = scheduledDepartTime;
+    }
+
+    public String getActualDepartTime() {
+        return actualDepartTime;
+    }
+
+    public void setActualDepartTime(String actualDepartTime) {
+        this.actualDepartTime = actualDepartTime;
+    }
+
+    public String getScheduledArrivalTime() {
+        return scheduledArrivalTime;
+    }
+
+    public void setScheduledArrivalTime(String scheduledArrivalTime) {
+        this.scheduledArrivalTime = scheduledArrivalTime;
+    }
+
+    public String getActualArrivalTime() {
+        return actualArrivalTime;
+    }
+
+    public void setActualArrivalTime(String actualArrivalTime) {
+        this.actualArrivalTime = actualArrivalTime;
+    }
+
+    public void setAircraft(Aircraft aircraft) {
+        this.aircraft = aircraft;
+    }
+
+    public Airline getAirline() {
+        return airline;
+    }
+
+    public void setAirline(Airline airline) {
+        this.airline = airline;
     }
 
     public String toString(){

@@ -15,6 +15,52 @@ public class Console {
         // Default user is created
         User user = new EndUser();
 
+        // Instantiating aircrafts
+        Aircraft p1 = new Aircraft("1", "landed", false);
+        Aircraft p2 = new Aircraft("2", "landed", true);
+        Aircraft p3 = new Aircraft("3", "landed", true);
+        Aircraft p4 = new Aircraft("4", "landed", true);
+        Aircraft p5 = new Aircraft("5", "landed", true);
+        Aircraft p6 = new Aircraft("6", "landed", false);
+        Aircraft p7 = new Aircraft("7", "landed", false);
+        Aircraft p8 = new Aircraft("8", "landed", false);
+        Aircraft p9 = new Aircraft("9", "landed", false);
+        Aircraft p10 = new Aircraft("10", "landed", false);
+        Aircraft p11 = new Aircraft("11", "landed", false);
+        Aircraft p12 = new Aircraft("12", "landed", false);
+        Aircraft p13 = new Aircraft("13", "landed", false);
+
+        ArrayList<Aircraft> air1Planes = new ArrayList<>();
+        air1Planes.add(p2);
+        air1Planes.add(p6);
+        air1Planes.add(p7);
+
+        ArrayList<Aircraft> air2Planes = new ArrayList<>();
+        air2Planes.add(p3);
+        air2Planes.add(p8);
+        air2Planes.add(p9);
+
+        ArrayList<Aircraft> air3Planes = new ArrayList<>();
+        air3Planes.add(p4);
+        air3Planes.add(p10);
+        air3Planes.add(p11);
+
+        ArrayList<Aircraft> air4Planes = new ArrayList<>();
+        air4Planes.add(p5);
+        air4Planes.add(p12);
+        air4Planes.add(p13);
+
+        ArrayList<Aircraft> airlinePlanes = new ArrayList<>();
+        airlinePlanes.add(p1);
+        airlinePlanes.add(p6);
+        airlinePlanes.add(p7);
+        airlinePlanes.add(p8);
+        airlinePlanes.add(p9);
+        airlinePlanes.add(p10);
+        airlinePlanes.add(p11);
+        airlinePlanes.add(p12);
+        airlinePlanes.add(p13);
+
         // Instantiating cities
         City city1 = new City("city1", "country1", 15.0);
         City city2 = new City("city2", "country2", -126.3);
@@ -22,22 +68,20 @@ public class Console {
         City city4 = new City("city4", "country4", 0.0);
 
         // Instantiating airports
-        Airport air1 = new Airport("air1", "AIR", city1);
-        Airport air2 = new Airport("air2", "AIRE", city2);
-        Airport air3 = new Airport("air3", "AIRES", city3);
-        Airport air4 = new Airport("air4", "AIRESE", city4);
+        Airport air1 = new Airport("air1", "AIR", city1, air1Planes);
+        Airport air2 = new Airport("air2", "AIRE", city2, air2Planes);
+        Airport air3 = new Airport("air3", "AIRES", city3, air3Planes);
+        Airport air4 = new Airport("air4", "AIRESE", city4, air4Planes);
 
-        // Instantiating aircrafts
-        Aircraft p1 = new Aircraft("1", "flying", false);
-        Aircraft p2 = new Aircraft("2", "landed", true);
+        Airport[] airports = {air1, air2, air3, air4};
 
         // Instantiating airlines
-        Airline airline1 = new Airline("Airline1");
-        Airline airline2 = new Airline("Airline2");
+        Airline airline1 = new Airline("Airline1", airlinePlanes);
+        Airline airline2 = new Airline("Private Airline");
 
         // Instantiating flights
-        Flight f1 = new Flight("FLIGHT1", air1, air2, "1am", "3am", "12pm", "", p1, airline1);
-        Flight f2 = new Flight("FLIGHT2", air1, air2, "5am", "5am", "1pm", "2pm", p2, airline2);
+        Flight f1 = new Flight("FLIGHT1", air1, air2, "1am", "3am", "12pm", "5am", p1, airline1);
+        Flight f2 = new Flight("FLIGHT2", air2, air3, "5am", "5am", "1pm", "2pm", p2, airline2);
 
         // Adding flights to Flights
         Flights.setFlights(f1);
@@ -55,7 +99,7 @@ public class Console {
         // Instantiating administrators
         User sysAdmin = new SystemAdmin("admin1", "admin1");
         User airportAdmin = new AirportAdmin("admin2", "admin2", air1);
-        User airlineAdmin = new AirlineAdmin("admin3", "admin3", new Airline());
+        User airlineAdmin = new AirlineAdmin("admin3", "admin3", airline1);
 
         // Instantiating end user
         User endUser2 = new EndUser("user1", "user1", false);
@@ -86,14 +130,31 @@ public class Console {
             } else if (login.get(0).equals("users.EndUser")) {
                 ((EndUser) user).setIsRegistered(true);
             }
+            System.out.print("Type 1 to Search Flights or Type 2 to Add a New Flight: ");
+            String option2 = kb.nextLine();
 
-            System.out.print("Enter Source of Flight: ");
-            String source = kb.nextLine();
-            System.out.print("Enter Destination of Flight: ");
-            String destination = kb.nextLine();
+            if(option2.equals("1")){
+                System.out.print("Enter Source of Flight: ");
+                String source = kb.nextLine();
+                System.out.print("Enter Destination of Flight: ");
+                String destination = kb.nextLine();
 
-            // Checks if user has authentication to view the flights
-            checkPrivate(getFlight(source, destination), user);
+                // Checks if user has authentication to view the flights
+                Flights.checkPrivate(Flights.getFlight(source, destination), user);
+            }else{
+                System.out.print("Enter Flight Number: ");
+                String fNumber = kb.nextLine();
+                System.out.print("Enter Source of Flight: ");
+                String fSource = kb.nextLine();
+                System.out.print("Enter Destination of Flight: ");
+                String fDestination = kb.nextLine();
+                System.out.print("Enter Departure Time of Flight: ");
+                String fDepartureTime = kb.nextLine();
+                System.out.print("Enter Arrival Time of Flight: ");
+                String fArrivalTime = kb.nextLine();
+
+                Flights.registerFlight(fNumber, getAirportByCode(airports, fSource), getAirportByCode(airports, fDestination), fDepartureTime, fArrivalTime, user);
+            }
 
         } else if (option == 2) {
             // If user is not logged in and wants to see flights
@@ -102,45 +163,20 @@ public class Console {
             System.out.print("Enter Airport Code for Destination: ");
             String destination = kb.nextLine();
 
-            checkPrivate(getFlight(source, destination), user);
+            Flights.checkPrivate(Flights.getFlight(source, destination), user);
         }
 
         kb.close();
     }
 
-    private static ArrayList<Flight> getFlight(String source, String destination) {
-        ArrayList<Flight> foundFlights = new ArrayList<>();
-        for (Flight flight : Flights.getFlights()) {
-            if (flight.getSource().getCode().equals(source) && flight.getDestination().getCode().equals(destination)) {
-                foundFlights.add(flight);
+    private static Airport getAirportByCode(Airport[] airports, String code){
+
+        for(int i = 0; i < airports.length; i++){
+            if(airports[i].getCode().equals(code)){
+                return airports[i];
             }
         }
-        return foundFlights;
+        return null;
     }
 
-    private static void checkPrivate(ArrayList<Flight> foundFlights, User user) {
-        for (Flight flight : foundFlights) {
-            if (user instanceof AirportAdmin) {
-                if (flight.getAircraft().getIsPrivate()) {
-                    if ((flight.getSource().getCode().equals(((AirportAdmin) user).getAirport().getCode())) || (flight.getDestination().getCode().equals(((AirportAdmin) user).getAirport().getCode()))) {
-                        System.out.println(flight.toString());
-                    }
-                } else {
-                    System.out.println(flight.toString());
-                }
-            } else if (user instanceof EndUser) {
-                if (!flight.getAircraft().getIsPrivate()) {
-                    if (((EndUser) user).getIsRegistered()) {
-                        System.out.println(flight.toString());
-                    } else {
-                        System.out.println(flight.displayNonRegisteredUser());
-                    }
-                }
-            } else {
-                if (!flight.getAircraft().getIsPrivate()) {
-                    System.out.println(flight.toString());
-                }
-            }
-        }
-    }
 }

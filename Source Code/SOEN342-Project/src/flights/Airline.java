@@ -18,6 +18,11 @@ public class Airline {
         this.fleet = new ArrayList<>();
     }
 
+    public Airline(String name, List<Aircraft> fleet){
+        this.name = name;
+        this.fleet = fleet;
+    }
+
     public Airline(Airline airline){
         this.name = airline.getName();
         this.fleet = new ArrayList<>();
