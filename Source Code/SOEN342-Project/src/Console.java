@@ -1,6 +1,7 @@
 import flights.*;
 import users.*;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -8,9 +9,29 @@ import java.util.Scanner;
 public class Console {
     public static List<User> users = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         // Creates Instance of Singleton Flight class
         Flights.getInstance();
+
+        Class.forName("org.sqlite.JDBC");
+
+        String url = "jdbc:sqlite:src/Database/AirportSimulation.db";
+
+        try {
+            Connection conn = DriverManager.getConnection(url);
+
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT * FROM User");
+
+            while(rs.next()){
+                String un =  rs.getString("username");
+                System.out.println(un);
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         // Default user is created
         User user = new EndUser();
