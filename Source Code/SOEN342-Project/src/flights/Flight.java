@@ -110,13 +110,13 @@ public class Flight {
     }
 
     public String toString(){
-        return "Flight #: " + this.number + "\nSource: " + this.source.getCode() + "\nDestination: " + this.destination.getCode() + "\nScheduled Depart Time: " + this.scheduledDepartTime + "\nActual Depart Time: " + this.actualDepartTime
+        return "\nFlight #: " + this.number + "\nSource: " + this.source.getCode() + "\nDestination: " + this.destination.getCode() + "\nScheduled Depart Time: " + this.scheduledDepartTime + "\nActual Depart Time: " + this.actualDepartTime
                 + "\nScheduled Arrival Time: " + this.scheduledArrivalTime + "\nActual Arrival Time: " + this.actualArrivalTime + "\nAirline: " + this.airline.getName() + "\nAircraft ID: " + this.aircraft.getIdentifier()
                 + "\nAircraft Status: " + this.aircraft.getStatus() + "\nPrivate Flight: " + this.aircraft.getIsPrivate() + "\nCity: " + this.destination.getCity().getName() + "\nCountry: " + this.destination.getCity().getCountry()
                 + "\nTemperature: " + this.destination.getCity().getTemperature() + "C\n";
     }
 
     public String displayNonRegisteredUser(){
-        return "Flight #: " + this.number + "\nSource: " + this.source.getCode() + "\nDestination: " + this.destination.getCode();
+        return "\nFlight #: " + this.number + "\nSource: " + this.source.getCode() + "\nDestination: " + this.destination.getCode() + "\n";
     }
 }

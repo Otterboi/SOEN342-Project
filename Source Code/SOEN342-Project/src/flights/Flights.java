@@ -8,16 +8,19 @@ import users.User;
 import java.util.ArrayList;
 
 public class Flights {
-    private static Flights INSTANCE;
+    private static volatile Flights INSTANCE;
     private static ArrayList<Flight> flights;
-
     private Flights(){
         flights = new ArrayList<>();
     }
 
     public static Flights getInstance(){
         if(INSTANCE == null){
-            INSTANCE = new Flights();
+            synchronized (Flights.class){
+                if (INSTANCE == null){
+                    INSTANCE = new Flights();
+                }
+            }
         }
 
         return INSTANCE;
@@ -64,14 +67,10 @@ public class Flights {
 
         if(verifyFlight(newFlight)){
             setFlights(newFlight);
-            System.out.println("Flight Added");
+            System.out.println("\nFlight Added");
         }else{
             newFlight = null;
-            System.out.println("Flight Cannot be added");
-        }
-
-        for(Flight f : getFlights()){
-            System.out.println(f.toString());
+            System.out.println("\nFlight Cannot be added");
         }
 
     }
@@ -119,22 +118,22 @@ public class Flights {
             if (user instanceof AirportAdmin) {
                 if (flight.getAircraft().getIsPrivate()) {
                     if ((flight.getSource().getCode().equals(((AirportAdmin) user).getAirport().getCode())) || (flight.getDestination().getCode().equals(((AirportAdmin) user).getAirport().getCode()))) {
-                        System.out.println(flight.toString());
+                        System.out.print(flight.toString());
                     }
                 } else {
-                    System.out.println(flight.toString());
+                    System.out.print(flight.toString());
                 }
             } else if (user instanceof EndUser) {
                 if (!flight.getAircraft().getIsPrivate()) {
                     if (((EndUser) user).getIsRegistered()) {
-                        System.out.println(flight.toString());
+                        System.out.print(flight.toString());
                     } else {
-                        System.out.println(flight.displayNonRegisteredUser());
+                        System.out.print(flight.displayNonRegisteredUser());
                     }
                 }
             } else {
                 if (!flight.getAircraft().getIsPrivate()) {
-                    System.out.println(flight.toString());
+                    System.out.print(flight.toString());
                 }
             }
         }
