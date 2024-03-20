@@ -1,7 +1,8 @@
+import Authentication.Authentication;
+import Authentication.UserDBController;
 import flights.*;
 import users.*;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,13 +10,18 @@ import java.util.Scanner;
 public class Console {
     public static List<User> users = new ArrayList<>();
 
+
     public static void main(String[] args) throws ClassNotFoundException {
+
+        UserDBController userDB = new UserDBController();
+        Authentication auth = new Authentication(userDB);
+
         // Creates Instance of Singleton Flight class
         Flights.getInstance();
 
         Class.forName("org.sqlite.JDBC");
 
-        String url = "jdbc:sqlite:src/Database/AirportSimulation.db";
+        /*String url = "jdbc:sqlite:src/Database/AirportSimulation.db";
 
         try {
             Connection conn = DriverManager.getConnection(url);
@@ -31,7 +37,7 @@ public class Console {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
         // Default user is created
         User user = new EndUser();
@@ -90,7 +96,7 @@ public class Console {
 
         // Instantiating airports
         Airport air1 = new Airport("air1", "AIR", city1, air1Planes);
-        Airport air2 = new Airport("air2", "AIRE", city2, air2Planes);
+        Airport air2 = new Airport("air2", "YUL", city2, air2Planes);
         Airport air3 = new Airport("air3", "AIRES", city3, air3Planes);
         Airport air4 = new Airport("air4", "AIRESE", city4, air4Planes);
 
@@ -114,22 +120,22 @@ public class Console {
         int option = kb.nextInt();
         kb.nextLine();
 
-        //Create an instance of Authentication
-        Authentication auth = new Authentication();
+        //Create an instance of Authentication.Authentication
+        //Authentication auth = new Authentication();
 
-        // Instantiating administrators
+        /*// Instantiating administrators
         User sysAdmin = new SystemAdmin("admin1", "admin1");
         User airportAdmin = new AirportAdmin("admin2", "admin2", air1);
-        User airlineAdmin = new AirlineAdmin("admin3", "admin3", airline1);
+        User airlineAdmin = new AirlineAdmin("admin3", "admin3", airline1);*/
 
         // Instantiating end user
         User endUser2 = new EndUser("user1", "user1", false);
 
-        // Adding useres to users list
+        /*// Adding useres to users list
         users.add(sysAdmin);
         users.add(airportAdmin);
         users.add(airlineAdmin);
-        users.add(endUser2);
+        users.add(endUser2);*/
 
         if (option == 1) {
             // All information for if the user decided to sign in
@@ -139,16 +145,16 @@ public class Console {
             String password = kb.nextLine();
 
             // Attempts to log in the user
-            ArrayList<Object> login = auth.login(username, password);
+            ArrayList<Object> login = auth.loginUser(username, password);
 
             // Decides what kind of user has been logged in
-            if (login.get(0).equals("users.SystemAdmin")) {
+            if (login.get(0).equals("system_admin")) {
                 user = (SystemAdmin) login.get(1);
-            } else if (login.get(0).equals("users.AirportAdmin")) {
+            } else if (login.get(0).equals("airport_admin")) {
                 user = (AirportAdmin) login.get(1);
-            } else if (login.get(0).equals("users.AirlineAdmin")) {
+            } else if (login.get(0).equals("airline_admin")) {
                 user = (AirlineAdmin) login.get(1);
-            } else if (login.get(0).equals("users.EndUser")) {
+            } else if (login.get(0).equals("end_user")) {
                 ((EndUser) user).setIsRegistered(true);
             }
             System.out.print("Type 1 to Search Flights or Type 2 to Add a New Flight: ");
