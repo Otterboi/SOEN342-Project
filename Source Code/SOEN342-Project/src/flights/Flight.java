@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Flight {
-    private String number;
+    private int number;
     private Airport source;
     private Airport destination;
     private String scheduledDepartTime;
@@ -16,7 +16,7 @@ public class Flight {
     private static Flight instance = null;
 
     public Flight(){
-        this.number = "";
+        this.number = 0;
         this.source = new Airport();
         this.destination = new Airport();
         this.scheduledDepartTime = "";
@@ -27,7 +27,7 @@ public class Flight {
         this.airline = new Airline();
     }
 
-    public Flight(String number, Airport source, Airport destination, String scheduledDepartTime, String actualDepartTime, String scheduledArrivalTime, String actualArrivalTime, Aircraft aircraft, Airline airline){
+    public Flight(int number, Airport source, Airport destination, String scheduledDepartTime, String actualDepartTime, String scheduledArrivalTime, String actualArrivalTime, Aircraft aircraft, Airline airline){
         this.number = number;
         this.source = source;
         this.destination = destination;
@@ -61,9 +61,9 @@ public class Flight {
         return this.aircraft;
     }
 
-    public String getNumber() { return this.number;}
+    public int getNumber() { return this.number;}
 
-    public void setNumber(String number) { this.number = number;}
+    public void setNumber(int number) { this.number = number;}
 
     public String getScheduledDepartTime() {
         return scheduledDepartTime;

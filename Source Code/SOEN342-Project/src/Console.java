@@ -16,7 +16,7 @@ public class Console {
     public static List<User> users = new ArrayList<>();
     public static Airport[] airports;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // Creates Instance of Singleton Flight class
         Flights.getInstance();
         Lock lock = new Lock();
@@ -24,19 +24,19 @@ public class Console {
         lock.setLock("read", "unlocked");
 
         // Instantiating aircrafts
-        Aircraft p1 = new Aircraft("1", "landed", false);
-        Aircraft p2 = new Aircraft("2", "landed", true);
-        Aircraft p3 = new Aircraft("3", "landed", true);
-        Aircraft p4 = new Aircraft("4", "landed", true);
-        Aircraft p5 = new Aircraft("5", "landed", true);
-        Aircraft p6 = new Aircraft("6", "landed", false);
-        Aircraft p7 = new Aircraft("7", "landed", false);
-        Aircraft p8 = new Aircraft("8", "landed", false);
-        Aircraft p9 = new Aircraft("9", "landed", false);
-        Aircraft p10 = new Aircraft("10", "landed", false);
-        Aircraft p11 = new Aircraft("11", "landed", false);
-        Aircraft p12 = new Aircraft("12", "landed", false);
-        Aircraft p13 = new Aircraft("13", "landed", false);
+        Aircraft p1 = new Aircraft(1, "landed", false);
+        Aircraft p2 = new Aircraft(2, "landed", true);
+        Aircraft p3 = new Aircraft(3, "landed", true);
+        Aircraft p4 = new Aircraft(4, "landed", true);
+        Aircraft p5 = new Aircraft(5, "landed", true);
+        Aircraft p6 = new Aircraft(6, "landed", false);
+        Aircraft p7 = new Aircraft(7, "landed", false);
+        Aircraft p8 = new Aircraft(8, "landed", false);
+        Aircraft p9 = new Aircraft(9, "landed", false);
+        Aircraft p10 = new Aircraft(10, "landed", false);
+        Aircraft p11 = new Aircraft(11, "landed", false);
+        Aircraft p12 = new Aircraft(12, "landed", false);
+        Aircraft p13 = new Aircraft(13, "landed", false);
 
         ArrayList<Aircraft> air1Planes = new ArrayList<>();
         air1Planes.add(p2);
@@ -70,15 +70,15 @@ public class Console {
         airlinePlanes.add(p13);
 
         // Instantiating cities
-        City city1 = new City("city1", "country1", 15.0);
-        City city2 = new City("city2", "country2", -126.3);
-        City city3 = new City("city3", "country3", 60.45);
-        City city4 = new City("city4", "country4", 0.0);
+        City city1 = new City("city1", "country1", 150);
+        City city2 = new City("city2", "country2", -55);
+        City city3 = new City("city3", "country3", 60);
+        City city4 = new City("city4", "country4", 0);
 
         // Instantiating airports
-        Airport air1 = new Airport("air1", "AIR", city1, air1Planes);
-        Airport air2 = new Airport("air2", "AIRE", city2, air2Planes);
-        Airport air3 = new Airport("air3", "AIRES", city3, air3Planes);
+        Airport air1 = new Airport("air1", "JFK", city1, air1Planes);
+        Airport air2 = new Airport("air2", "YUL", city2, air2Planes);
+        Airport air3 = new Airport("air3", "CUN", city3, air3Planes);
         Airport air4 = new Airport("air4", "AIRESE", city4, air4Planes);
 
         airports = new Airport[]{air1, air2, air3, air4};
@@ -88,8 +88,8 @@ public class Console {
         Airline airline2 = new Airline("Private Airline");
 
         // Instantiating flights
-        Flight f1 = new Flight("FLIGHT1", air1, air2, "1am", "3am", "12pm", "5am", p1, airline1);
-        Flight f2 = new Flight("FLIGHT2", air2, air3, "5am", "5am", "1pm", "2pm", p2, airline2);
+        Flight f1 = new Flight(1, air1, air2, "1am", "3am", "12pm", "5am", p1, airline1);
+        Flight f2 = new Flight(2, air2, air3, "5am", "5am", "1pm", "2pm", p2, airline2);
 
         // Adding flights to Flights
         Flights.setFlights(f1);
@@ -170,7 +170,7 @@ public class Console {
                             System.out.print("Enter Arrival Time of Flight: ");
                             String fArrivalTime = kb.nextLine();
 
-                            Flights.registerFlight(fNumber, getAirportByCode(airports, fSource), getAirportByCode(airports, fDestination), fDepartureTime, fArrivalTime, user);
+                            Flights.registerFlight(Integer.parseInt(fNumber), getAirportByCode(airports, fSource), getAirportByCode(airports, fDestination), fDepartureTime, fArrivalTime, user);
                             lock.setLock("write", "unlocked");
                         }else{
                             System.out.println("Someone is already interacting with the database!\nPlease try again later!");
@@ -190,7 +190,7 @@ public class Console {
         //kb.close();
     }
 
-    private static void allowRead(Lock lock, User user, Scanner kb) {
+    private static void allowRead(Lock lock, User user, Scanner kb) throws SQLException, ClassNotFoundException {
         if(!lock.getLock("write")){
             lock.setLock("read", "locked");
 

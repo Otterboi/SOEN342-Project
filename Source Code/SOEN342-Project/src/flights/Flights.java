@@ -5,13 +5,17 @@ import users.AirportAdmin;
 import users.EndUser;
 import users.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Flights {
     private static volatile Flights INSTANCE;
     private static ArrayList<Flight> flights;
+    private static FlightDBController flightDBController;
+
     private Flights(){
         flights = new ArrayList<>();
+        flightDBController = new FlightDBController();
     }
 
     public static Flights getInstance(){
@@ -35,7 +39,7 @@ public class Flights {
     }
 
 
-    public static void registerFlight(String number, Airport source, Airport destination, String departureTime, String arrivalTime, User user){
+    public static void registerFlight(int number, Airport source, Airport destination, String departureTime, String arrivalTime, User user){
         Flight newFlight = new Flight();
         newFlight.setNumber(number);
         newFlight.setSource(source);
@@ -103,14 +107,8 @@ public class Flights {
         return allowAdd;
     }
 
-    public static ArrayList<Flight> getFlight(String source, String destination) {
-        ArrayList<Flight> foundFlights = new ArrayList<>();
-        for (Flight flight : Flights.getFlights()) {
-            if (flight.getSource().getCode().equals(source) && flight.getDestination().getCode().equals(destination)) {
-                foundFlights.add(flight);
-            }
-        }
-        return foundFlights;
+    public static ArrayList<Flight> getFlight(String source, String destination) throws SQLException, ClassNotFoundException {
+        return flightDBController.getFlightsFromDB(source, destination);
     }
 
     public static void checkPrivate(ArrayList<Flight> foundFlights, User user) {
@@ -119,6 +117,8 @@ public class Flights {
                 if (flight.getAircraft().getIsPrivate()) {
                     if ((flight.getSource().getCode().equals(((AirportAdmin) user).getAirport().getCode())) || (flight.getDestination().getCode().equals(((AirportAdmin) user).getAirport().getCode()))) {
                         System.out.print(flight.toString());
+                    }else{
+                        System.out.println("\nYou do not have the correct permissions to view this flight!");
                     }
                 } else {
                     System.out.print(flight.toString());
@@ -130,10 +130,14 @@ public class Flights {
                     } else {
                         System.out.print(flight.displayNonRegisteredUser());
                     }
+                }else{
+                    System.out.println("\nYou do not have the correct permissions to view this flight!");
                 }
             } else {
                 if (!flight.getAircraft().getIsPrivate()) {
                     System.out.print(flight.toString());
+                }else{
+                    System.out.println("\nYou do not have the correct permissions to view this flight!");
                 }
             }
         }
