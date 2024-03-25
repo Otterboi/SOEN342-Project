@@ -15,20 +15,20 @@ public class Console {
 
         Class.forName("org.sqlite.JDBC");
 
-        String url = "jdbc:sqlite:src/Database/AirportSimulation.db";
-
+        String url = "jdbc:sqlite:C:\\Users\\vuong\\SOEN342-Project\\Source Code\\SOEN342-Project\\src\\Database\\AirportSimulation.db";
+        
         try {
             Connection conn = DriverManager.getConnection(url);
 
             Statement stm = conn.createStatement();
-            ResultSet rs = stm.executeQuery("SELECT * FROM User");
+            ResultSet rs = stm.executeQuery("SELECT * FROM Airport");
 
             while(rs.next()){
-                String un =  rs.getString("username");
+                String un =  rs.getString("airport_code");
                 System.out.println(un);
             }
 
-
+            rs.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -97,7 +97,7 @@ public class Console {
         Airport[] airports = {air1, air2, air3, air4};
 
         // Instantiating airlines
-        Airline airline1 = new Airline("Airline1", airlinePlanes);
+        Airline airline1 = new Airline("Air Canada", airlinePlanes);
         Airline airline2 = new Airline("Private Airline");
 
         // Instantiating flights
@@ -163,8 +163,6 @@ public class Console {
                 // Checks if user has authentication to view the flights
                 Flights.checkPrivate(Flights.getFlight(source, destination), user);
             }else{
-                System.out.print("Enter Flight Number: ");
-                String fNumber = kb.nextLine();
                 System.out.print("Enter Source of Flight: ");
                 String fSource = kb.nextLine();
                 System.out.print("Enter Destination of Flight: ");
@@ -173,8 +171,7 @@ public class Console {
                 String fDepartureTime = kb.nextLine();
                 System.out.print("Enter Arrival Time of Flight: ");
                 String fArrivalTime = kb.nextLine();
-
-                Flights.registerFlight(fNumber, getAirportByCode(airports, fSource), getAirportByCode(airports, fDestination), fDepartureTime, fArrivalTime, user);
+                Flights.registerFlight(getAirportByCode(fSource), getAirportByCode(fDestination), fDepartureTime, fArrivalTime, user);
             }
 
         } else if (option == 2) {
@@ -190,14 +187,32 @@ public class Console {
         kb.close();
     }
 
-    private static Airport getAirportByCode(Airport[] airports, String code){
+    private static Airport getAirportByCode(String code){
 
-        for(int i = 0; i < airports.length; i++){
-            if(airports[i].getCode().equals(code)){
-                return airports[i];
+        String url = "jdbc:sqlite:C:\\Users\\vuong\\SOEN342-Project\\Source Code\\SOEN342-Project\\src\\Database\\AirportSimulation.db";
+
+        Airport newAirport = new Airport();
+        try {
+            Connection conn = DriverManager.getConnection(url);
+
+            Statement stm = conn.createStatement();
+            ResultSet rs = stm.executeQuery("SELECT * FROM Airport");
+
+            while(rs.next()){
+                String un =  rs.getString("airport_code");
+                if (un.equals(code))
+                {
+                    newAirport = new Airport(rs.getString("airport_name"), code, new City(), null);
+                    break;
+                }
             }
+            rs.close();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return null;
+        return newAirport;
     }
 
 }
