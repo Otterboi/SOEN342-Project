@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class FlightDBController {
 
     private static String URL; ;
-    private static Connection connection;
 
     public FlightDBController() {
         URL = "jdbc:sqlite:src/Database/AirportSimulation.db";
@@ -16,7 +15,7 @@ public class FlightDBController {
         ArrayList<Flight> foundFlights = new ArrayList<>();
 
         Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection(URL);
+        Connection connection = DriverManager.getConnection(URL);
         String sql = "SELECT f.flight_number, f.scheduledDepartTime, f.actualDepartTime, f.scheduledArrivalTime, f.actualArrivalTime, \n" +
                 "s.airport_code AS source_code,\n" +
                 "d.airport_code AS destination_code, cd.city_name AS destination_city_name, cd.country AS city_country, cd.city_temperature AS destination_temp, \n" +
@@ -102,6 +101,9 @@ public class FlightDBController {
 
         }
 
+        rs.close();
+        ps.close();
+        connection.close();
         return foundFlights;
     }
 }
