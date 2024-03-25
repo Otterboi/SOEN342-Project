@@ -1,6 +1,8 @@
 package Authentication;
 
 import users.*;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,7 +26,7 @@ public class Authentication {
         return loggedInUser;
     }*/
 
-    public ArrayList<Object> loginUser(String username, String password) {
+    public ArrayList<Object> loginUser(String username, String password) throws SQLException, ClassNotFoundException {
 
         Object[] login = userDB.authenticateUser(username, password);
         ArrayList <Object> list = new ArrayList<>();

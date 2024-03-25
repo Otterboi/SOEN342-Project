@@ -3,6 +3,7 @@ import Authentication.UserDBController;
 import flights.*;
 import users.*;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -10,16 +11,19 @@ import java.util.Scanner;
 public class Console {
     public static List<User> users = new ArrayList<>();
 
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
-    public static void main(String[] args) throws ClassNotFoundException {
-
+        //User Authentication with database
         UserDBController userDB = new UserDBController();
         Authentication auth = new Authentication(userDB);
+
+        //Adding an Airport to database
+        AirportDBController airportDB = new AirportDBController();
 
         // Creates Instance of Singleton Flight class
         Flights.getInstance();
 
-        Class.forName("org.sqlite.JDBC");
+        //Class.forName("org.sqlite.JDBC");
 
         /*String url = "jdbc:sqlite:src/Database/AirportSimulation.db";
 
@@ -157,7 +161,14 @@ public class Console {
             } else if (login.get(0).equals("end_user")) {
                 ((EndUser) user).setIsRegistered(true);
             }
-            System.out.print("Type 1 to Search Flights or Type 2 to Add a New Flight: ");
+            if(user instanceof SystemAdmin){
+                System.out.print("Type 1 to Search Flights or Type 2 to Add a New Flight or Type 4 to Add a New Airport: ");
+            }
+
+            else{
+                System.out.print("Type 1 to Search Flights or Type 2 to Add a New Flight: ");
+            }
+
             String option2 = kb.nextLine();
 
             if(option2.equals("1")){
@@ -168,7 +179,8 @@ public class Console {
 
                 // Checks if user has authentication to view the flights
                 Flights.checkPrivate(Flights.getFlight(source, destination), user);
-            }else{
+            }
+            else if(option2.equals("2")){
                 System.out.print("Enter Flight Number: ");
                 String fNumber = kb.nextLine();
                 System.out.print("Enter Source of Flight: ");
@@ -181,6 +193,17 @@ public class Console {
                 String fArrivalTime = kb.nextLine();
 
                 Flights.registerFlight(fNumber, getAirportByCode(airports, fSource), getAirportByCode(airports, fDestination), fDepartureTime, fArrivalTime, user);
+            }
+            else if(option2.equals("4")){
+                //Add airport UI
+                System.out.print("Enter New Airport Name: ");
+                String aName = kb.nextLine();
+                System.out.print("Enter New Airport Code: ");
+                String aCode = kb.nextLine();
+                System.out.print("Pick the following cities: Montreal, New York, Cancun, Reykjavik: ");
+                String cityName = kb.nextLine();
+
+                airportDB.addAirport(aName, aCode, cityName);
             }
 
         } else if (option == 2) {
