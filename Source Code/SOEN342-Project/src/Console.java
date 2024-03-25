@@ -1,4 +1,6 @@
 import Locks.Lock;
+import Authentication.Authentication;
+import Authentication.UserDBController;
 import flights.*;
 import users.*;
 
@@ -16,7 +18,15 @@ public class Console {
     public static List<User> users = new ArrayList<>();
     public static Airport[] airports;
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+
+        //User Authentication with database
+        UserDBController userDB = new UserDBController();
+        Authentication auth = new Authentication(userDB);
+
+        //Adding an Airport to database
+        AirportDBController airportDB = new AirportDBController();
+
         // Creates Instance of Singleton Flight class
         Flights.getInstance();
         Lock lock = new Lock();
@@ -95,19 +105,22 @@ public class Console {
         Flights.setFlights(f1);
         Flights.setFlights(f2);
 
+        //Create an instance of Authentication
+        //Authentication auth = new Authentication();
+
         // Instantiating administrators
         User sysAdmin = new SystemAdmin("admin1", "admin1");
-        User airportAdmin = new AirportAdmin("admin2", "admin2", air2);
-        User airlineAdmin = new AirlineAdmin("admin3", "admin3", airline1);
+        User airportAdmin = new AirportAdmin("admin2", "admin2", air1);
+        User airlineAdmin = new AirlineAdmin("admin3", "admin3", airline1);*/
 
         // Instantiating end user
         User endUser2 = new EndUser("user1", "user1", false);
 
-        // Adding useres to users list
+        /*// Adding useres to users list
         users.add(sysAdmin);
         users.add(airportAdmin);
         users.add(airlineAdmin);
-        users.add(endUser2);
+        users.add(endUser2);*/
 
         // User Interface
         boolean exit = false;
@@ -122,7 +135,7 @@ public class Console {
             String option = kb.nextLine();
 
             //Create an instance of Authentication
-            Authentication auth = new Authentication();
+            //Authentication auth = new Authentication();
 
             if (Integer.parseInt(option) == 1) {
                 // All information for if the user decided to sign in
@@ -132,7 +145,7 @@ public class Console {
                 String password = kb.nextLine();
 
                 // Attempts to log in the user
-                ArrayList<Object> login = auth.login(username, password);
+                ArrayList<Object> login = auth.loginUser(username, password);
 
                 // Decides what kind of user has been logged in
                 if (login.get(0).equals("users.SystemAdmin")) {
@@ -155,8 +168,8 @@ public class Console {
                 if (option2.equals("1")) {
                     allowRead(lock, user, kb);
                 } else {
-                    if(!lock.getLock("write")){
-                        if(!lock.getLock("read")){
+                    if (!lock.getLock("write")) {
+                        if (!lock.getLock("read")) {
                             lock.setLock("write", "locked");
 
                             System.out.print("Enter Flight Number: ");
@@ -172,10 +185,10 @@ public class Console {
 
                             Flights.registerFlight(Integer.parseInt(fNumber), getAirportByCode(airports, fSource), getAirportByCode(airports, fDestination), fDepartureTime, fArrivalTime, user);
                             lock.setLock("write", "unlocked");
-                        }else{
+                        } else {
                             System.out.println("Someone is already interacting with the database!\nPlease try again later!");
                         }
-                    }else{
+                    } else {
                         System.out.println("Someone is already interacting with the database!\nPlease try again later!");
                     }
 
@@ -183,15 +196,27 @@ public class Console {
 
             } else if (Integer.parseInt(option) == 2) {
                 allowRead(lock, user, kb);
-            } else {
+            } else if(Integer.parseInt(option) == 4)
+
+            {
+                //Add airport UI
+                System.out.print("Enter New Airport Name: ");
+                String aName = kb.nextLine();
+                System.out.print("Enter New Airport Code: ");
+                String aCode = kb.nextLine();
+                System.out.print("Pick the following cities: Montreal, New York, Cancun, Reykjavik: ");
+                String cityName = kb.nextLine();
+
+                airportDB.addAirport(aName, aCode, cityName);
+            }
+            else {
                 exit = true;
             }
         }
-        //kb.close();
     }
 
     private static void allowRead(Lock lock, User user, Scanner kb) throws SQLException, ClassNotFoundException {
-        if(!lock.getLock("write")){
+        if (!lock.getLock("write")) {
             lock.setLock("read", "locked");
 
             System.out.print("Enter Source of Flight: ");
@@ -203,7 +228,7 @@ public class Console {
             Flights.checkPrivate(Flights.getFlight(source, destination), user);
 
             lock.setLock("read", "unlocked");
-        }else{
+        } else {
             System.out.println("Someone is already interacting with the database!\nPlease try again later!");
         }
     }
@@ -218,14 +243,14 @@ public class Console {
         return null;
     }
 
-    private static String getLock(){
+    private static String getLock() {
         String lock = "";
 
         try {
             File file = new File("src/WriteLock.txt");
             Scanner fileScanner = new Scanner(file);
 
-            while(fileScanner.hasNextLine()){
+            while (fileScanner.hasNextLine()) {
                 lock = fileScanner.nextLine();
             }
 
@@ -237,7 +262,7 @@ public class Console {
         return lock;
     }
 
-    private static void setLock(String lock){
+    private static void setLock(String lock) {
         try {
             FileWriter writer = new FileWriter("src/WriteLock.txt");
             writer.write(lock);
