@@ -26,11 +26,7 @@
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
       <object connection-id="e6cb1a5c-ab99-4d52-92ae-818709c67a92" object-ref="schemas/main/tables/Airport" />
-      <object connection-id="e6cb1a5c-ab99-4d52-92ae-818709c67a92" object-ref="schemas/main/tables/Aircraft" />
-      <object connection-id="e6cb1a5c-ab99-4d52-92ae-818709c67a92" object-ref="schemas/main/tables/AirportFleet" />
-      <object connection-id="e6cb1a5c-ab99-4d52-92ae-818709c67a92" object-ref="schemas/main/tables/Airline" />
-      <object connection-id="e6cb1a5c-ab99-4d52-92ae-818709c67a92" object-ref="schemas/main/tables/AirlineFleet" />
-      <object connection-id="e6cb1a5c-ab99-4d52-92ae-818709c67a92" object-ref="schemas/main/tables/Flight" />
+      <object connection-id="e6cb1a5c-ab99-4d52-92ae-818709c67a92" object-ref="schemas/main/tables/City" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">

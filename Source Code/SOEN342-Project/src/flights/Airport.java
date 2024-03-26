@@ -37,8 +37,16 @@ public class Airport {
         return this.code;
     }
 
+    public void setCode(String code){
+        this.code = code;
+    }
+
     public City getCity(){
         return this.city;
+    }
+
+    public void setCity(City city){
+        this.city = city;
     }
 
     public void addAircraftToFleet(Aircraft aircraft){
