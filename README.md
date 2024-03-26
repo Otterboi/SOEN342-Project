@@ -1,4 +1,4 @@
-# SOEN342-Project
+# SOEN342 Project: Team 8
 ## Team Members
 | Name | ID | Email | Section | GitHub Username |
 | ---- | -- | ----- | ------- | --------------- |
