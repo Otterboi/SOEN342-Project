@@ -143,7 +143,6 @@ public class Console {
         }
     }
 
-    //private static Airport getAirportByCode(Airport[] airports, String code) {
     private static Airport getAirportByCode(String code) throws SQLException {
 
         String url = "jdbc:sqlite:src/Database/AirportSimulation.db";
@@ -162,9 +161,9 @@ public class Console {
                     newAirport = new Airport(rs.getString("airport_name"), code, new City(), null);
                     break;
                 }
-                rs.close();
-
             }
+            rs.close();
+            stm.close();
         }catch (Exception e){
             System.out.println(e);
         }

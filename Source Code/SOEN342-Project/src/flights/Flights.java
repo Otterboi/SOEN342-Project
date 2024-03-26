@@ -53,13 +53,14 @@ public class Flights {
         newFlight.setScheduledDepartTime(departureTime);
         newFlight.setScheduledArrivalTime(arrivalTime);
 
-        String url = "jdbc:sqlite:C:\\Users\\vuong\\SOEN342-Project\\Source Code\\SOEN342-Project\\src\\Database\\AirportSimulation.db";
+        String url = "jdbc:sqlite:src/Database/AirportSimulation.db";
 
         try {
             Connection conn = DriverManager.getConnection(url);
 
             Statement stm = conn.createStatement();
             Statement stm2 = conn.createStatement();
+            Statement stm3 = conn.createStatement();
             ResultSet rs0 = stm.executeQuery("SELECT * FROM Airport");
             int code = -1;
 
@@ -77,31 +78,36 @@ public class Flights {
             while (rs1.next()) {
                 aircraftAvailable = false;
                 if (code == rs1.getInt("airport_id")) {
-                    rs2 = stm2.executeQuery("SELECT * FROM AirlineFleet");
-                    while (rs2.next()) {
-                        if (rs1.getInt("aircraft_id") == rs2.getInt("aircraft_id")) {
+                    if(user instanceof AirportAdmin){
+                        ResultSet rs3 = stm3.executeQuery("SELECT * FROM Aircraft WHERE aircraft_id=" + rs1.getInt("aircraft_id"));
+                        if(rs3.getInt("is_private") == 1){
                             aircraftAvailable = true;
-                            Aircraft newAircraft = null;
-                            if (user instanceof AirlineAdmin) {
-                                newFlight.setAirline(((AirlineAdmin) user).getAirline());
-                                newAircraft = new Aircraft(Integer.toString(rs2.getInt("aircraft_id")), "landed", false);
-                            } else if (user instanceof AirportAdmin) {
-                                newFlight.setAirline(new Airline("Private Airline"));
-                                newAircraft = new Aircraft(Integer.toString(rs2.getInt("aircraft_id")), "landed", true);
-                            }
-                            newFlight.setAircraft(newAircraft);
-                            // stm.executeQuery("DELETE FROM AirportFleet where fleet_id = " + rs1.getInt("fleet_id"));
-                            // stm.executeQuery("DELETE FROM AirlineFleet where fleet_id = " + rs2.getInt("fleet_id"));
+                            newFlight.setAirline(new Airline("Private Airline"));
+                            newFlight.setAircraft(new Aircraft(Integer.toString(rs3.getInt("aircraft_id")), "landed", true));
+                            rs3.close();
                             break;
                         }
+                    }else if (user instanceof AirlineAdmin){
+                        rs2 = stm2.executeQuery("SELECT * FROM AirlineFleet");
+                        while(rs2.next()){
+                            if(rs1.getInt("aircraft_id") == rs2.getInt("aircraft_id")){
+                                aircraftAvailable = true;
+                                newFlight.setAirline(((AirlineAdmin) user).getAirline());
+                                newFlight.setAircraft(new Aircraft(Integer.toString(rs2.getInt("aircraft_id")), "landed", false));
+                                break;
+                            }
+                        }
                     }
-                    if (aircraftAvailable)
+
+                    if(aircraftAvailable){
                         break;
+                    }
                 }
             }
 
             stm.close();
             stm2.close();
+            stm3.close();
             rs1.close();
             rs2.close();
             conn.close();
@@ -152,7 +158,6 @@ public class Flights {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            System.out.println(newFlight.toString());
         } else {
             newFlight = null;
             System.out.println("\nFlight Cannot be added");
@@ -189,7 +194,7 @@ public class Flights {
 
     public static void addFlightToDb(Flight newFlight) {
         //Change this to a relative url or based on machine
-        String url = "jdbc:sqlite:C:\\Users\\vuong\\SOEN342-Project\\Source Code\\SOEN342-Project\\src\\Database\\AirportSimulation.db";
+        String url = "jdbc:sqlite:src/Database/AirportSimulation.db";
         try {
             Connection conn = DriverManager.getConnection(url);
             Statement stm = conn.createStatement();
@@ -202,7 +207,7 @@ public class Flights {
             if (newActualDepart.equals("")) {
                 newActualDepart = newScheduledDepart;
             }
-            newFlight.setActualArrivalTime(newActualDepart);
+            newFlight.setActualArrivalTime("");
 
             String newScheduledArrival = newFlight.getScheduledArrivalTime();
 
@@ -211,7 +216,7 @@ public class Flights {
             if (newActualArrival.equals("")) {
                 newActualArrival = newScheduledArrival;
             }
-            newFlight.setActualDepartTime(newActualDepart);
+            newFlight.setActualDepartTime("");
 
             // Get source and destination airport id
             String newSourceCode = newFlight.getSource().getCode();
@@ -228,7 +233,7 @@ public class Flights {
                 }
             }
 
-            int newAircraftId = Integer.parseInt(newFlight.getAircraft().getIdentifier());
+            String newAircraftId = newFlight.getAircraft().getIdentifier();
 
             // Get airline id
             String newAirlineName = newFlight.getAirline().getName();
@@ -242,37 +247,30 @@ public class Flights {
                     break;
                 }
             }
-            rs1.close();
+            stm1.close();
 
             // Add new Flight to db
             Statement stm2 = conn.createStatement();
             String sql = "INSERT INTO Flight (scheduledDepartTime, actualDepartTime, scheduledArrivalTime, actualArrivalTime, source_id, destination_id, aircraft_id, airline_id) VALUES('"
                     + newScheduledDepart + "', '" + newActualDepart + "', '"
                     + newScheduledArrival + "', '" + newActualArrival + "', " + newSourceId + ", "
-                    + newDestinationId + ", " + newAircraftId + ", " + newAirlineId + ")";
-            System.out.println(sql);
+                    + newDestinationId + ", '" + newAircraftId + "', " + newAirlineId + ")";
             stm2.executeUpdate(sql);
             System.out.println("Flight added");
 
+            rs.close();
+            rs1.close();
             stm.close();
-            stm1.close();
             stm2.close();
             conn.close();
-
         } catch (SQLException e) {
             System.out.println("Exception found");
             System.out.println(e.getMessage());
         }
     }
 
-    public static ArrayList<Flight> getFlight(String source, String destination) {
-        ArrayList<Flight> foundFlights = new ArrayList<>();
-        for (Flight flight : Flights.getFlights()) {
-            if (flight.getSource().getCode().equals(source) && flight.getDestination().getCode().equals(destination)) {
-                foundFlights.add(flight);
-            }
-        }
-        return foundFlights;
+    public static ArrayList<Flight> getFlight(String source, String destination) throws SQLException, ClassNotFoundException {
+        return flightDBController.getFlightsFromDB(source, destination);
     }
 
     public static void checkPrivate(ArrayList<Flight> foundFlights, User user) {
