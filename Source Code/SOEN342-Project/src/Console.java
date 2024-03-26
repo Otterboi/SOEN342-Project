@@ -10,14 +10,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Console {
-    public static List<User> users = new ArrayList<>();
-    public static Airport[] airports;
-
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
         //User Authentication with database
@@ -44,9 +39,6 @@ public class Console {
             Scanner kb = new Scanner(System.in);
             System.out.print("\nType 1 to SIGN IN or Type 2 to GET FLIGHTS or Type 3 to EXIT: ");
             String option = kb.nextLine();
-
-            //Create an instance of Authentication
-            //Authentication auth = new Authentication();
 
             if (Integer.parseInt(option) == 1) {
                 // All information for if the user decided to sign in
