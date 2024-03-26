@@ -34,7 +34,7 @@ public class Console {
         lock.setLock("read", "unlocked");
 
         // Instantiating aircrafts
-        Aircraft p1 = new Aircraft(1, "landed", false);
+        /*Aircraft p1 = new Aircraft(1, "landed", false);
         Aircraft p2 = new Aircraft(2, "landed", true);
         Aircraft p3 = new Aircraft(3, "landed", true);
         Aircraft p4 = new Aircraft(4, "landed", true);
@@ -46,8 +46,8 @@ public class Console {
         Aircraft p10 = new Aircraft(10, "landed", false);
         Aircraft p11 = new Aircraft(11, "landed", false);
         Aircraft p12 = new Aircraft(12, "landed", false);
-        Aircraft p13 = new Aircraft(13, "landed", false);
-
+        Aircraft p13 = new Aircraft(13, "landed", false);*/
+/*
         ArrayList<Aircraft> air1Planes = new ArrayList<>();
         air1Planes.add(p2);
         air1Planes.add(p6);
@@ -111,12 +111,12 @@ public class Console {
         // Instantiating administrators
         User sysAdmin = new SystemAdmin("admin1", "admin1");
         User airportAdmin = new AirportAdmin("admin2", "admin2", air1);
-        User airlineAdmin = new AirlineAdmin("admin3", "admin3", airline1);*/
+        User airlineAdmin = new AirlineAdmin("admin3", "admin3", airline1);
 
         // Instantiating end user
         User endUser2 = new EndUser("user1", "user1", false);
 
-        /*// Adding useres to users list
+        // Adding useres to users list
         users.add(sysAdmin);
         users.add(airportAdmin);
         users.add(airlineAdmin);
@@ -148,17 +148,21 @@ public class Console {
                 ArrayList<Object> login = auth.loginUser(username, password);
 
                 // Decides what kind of user has been logged in
-                if (login.get(0).equals("users.SystemAdmin")) {
+                if (login.get(0).equals("system_admin")) {
                     user = (SystemAdmin) login.get(1);
-                } else if (login.get(0).equals("users.AirportAdmin")) {
+                } else if (login.get(0).equals("airport_admin")) {
                     user = (AirportAdmin) login.get(1);
-                } else if (login.get(0).equals("users.AirlineAdmin")) {
+                } else if (login.get(0).equals("airline_admin")) {
                     user = (AirlineAdmin) login.get(1);
-                } else if (login.get(0).equals("users.EndUser")) {
+                } else if (login.get(0).equals("end_user")) {
                     ((EndUser) user).setIsRegistered(true);
                 }
                 if (!(user instanceof EndUser)) {
-                    System.out.print("\nType 1 to SEARCH FLIGHTS or Type 2 to ADD A NEW FLIGHT: ");
+                    if (!(user instanceof SystemAdmin)) {
+                        System.out.print("\nType 1 to SEARCH FLIGHTS or Type 2 to ADD A NEW FLIGHT: ");
+                    } else {
+                        System.out.print("\nType 1 to SEARCH FLIGHTS or Type 2 to ADD A NEW FLIGHT Type 4 to ADD A NEW AIRPORT: ");
+                    }
                 } else {
                     System.out.print("\nType 1 to SEARCH FLIGHTS: ");
                 }
@@ -167,7 +171,7 @@ public class Console {
 
                 if (option2.equals("1")) {
                     allowRead(lock, user, kb);
-                } else {
+                } else if (option2.equals("2")) {
                     if (!lock.getLock("write")) {
                         if (!lock.getLock("read")) {
                             lock.setLock("write", "locked");
@@ -192,24 +196,21 @@ public class Console {
                         System.out.println("Someone is already interacting with the database!\nPlease try again later!");
                     }
 
+                } else {
+                    //Add airport UI
+                    System.out.print("Enter New Airport Name: ");
+                    String aName = kb.nextLine();
+                    System.out.print("Enter New Airport Code: ");
+                    String aCode = kb.nextLine();
+                    System.out.print("Pick the following cities: Montreal, New York, Cancun, Reykjavik: ");
+                    String cityName = kb.nextLine();
+
+                    airportDB.addAirport(aName, aCode, cityName);
                 }
 
             } else if (Integer.parseInt(option) == 2) {
                 allowRead(lock, user, kb);
-            } else if(Integer.parseInt(option) == 4)
-
-            {
-                //Add airport UI
-                System.out.print("Enter New Airport Name: ");
-                String aName = kb.nextLine();
-                System.out.print("Enter New Airport Code: ");
-                String aCode = kb.nextLine();
-                System.out.print("Pick the following cities: Montreal, New York, Cancun, Reykjavik: ");
-                String cityName = kb.nextLine();
-
-                airportDB.addAirport(aName, aCode, cityName);
-            }
-            else {
+            } else {
                 exit = true;
             }
         }

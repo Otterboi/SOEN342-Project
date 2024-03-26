@@ -1,17 +1,15 @@
 package flights;
 
 public class Aircraft {
-    private int identifier;
+    private String identifier;
     private String status;
     private boolean isPrivate;
-
     public Aircraft(){
-        this.identifier = 0;
+        this.identifier = "";
         this.status = "";
         this.isPrivate = false;
     }
-
-    public Aircraft(int identifier, String status, boolean isPrivate){
+    public Aircraft(String identifier, String status, boolean isPrivate){
         this.identifier = identifier;
         this.status = status;
         this.isPrivate = isPrivate;
@@ -33,11 +31,11 @@ public class Aircraft {
         this.status = status;
     }
 
-    public int getIdentifier(){
+    public String getIdentifier(){
         return this.identifier;
     }
 
-    public void setIdentifier(int id){
+    public void setIdentifier(String id){
         this.identifier = id;
     }
 }

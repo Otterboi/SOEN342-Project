@@ -84,7 +84,7 @@ public class FlightDBController {
                 isPrivate = true;
             }
 
-            aircraft.setIdentifier(aircraftID);
+            aircraft.setIdentifier(aircraftID+"");
             aircraft.setStatus(aircraftStatus);
             aircraft.setPrivate(isPrivate);
 
