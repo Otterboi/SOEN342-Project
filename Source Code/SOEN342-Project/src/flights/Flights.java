@@ -45,7 +45,7 @@ public class Flights {
 
 
     // public static void registerFlight(int number, Airport source, Airport destination, String departureTime, String arrivalTime, User user){
-    public static void registerFlight(Airport source, Airport destination, String departureTime, String arrivalTime, User user) {
+    public static void registerFlight(Airport source, Airport destination, String departureTime, String arrivalTime, User user) throws SQLException, ClassNotFoundException {
         Flight newFlight = new Flight();
         newFlight.setNumber(-1);
         newFlight.setSource(source);
@@ -164,14 +164,14 @@ public class Flights {
         }
     }
 
-    private static boolean verifyFlight(Flight newFlight) {
+    private static boolean verifyFlight(Flight newFlight) throws SQLException, ClassNotFoundException {
         boolean allowAdd = true;
+        String newSource = newFlight.getSource().getCode();
+        String newDestination = newFlight.getDestination().getCode();
 
-        for (Flight currentFlight : getFlights()) {
-            String newSource = newFlight.getSource().getCode();
+        for (Flight currentFlight : getFlight(newSource, newDestination)) {
             String currentSource = currentFlight.getSource().getCode();
 
-            String newDestination = newFlight.getDestination().getCode();
             String currentDestination = currentFlight.getDestination().getCode();
 
             if (currentSource.equals(newSource)) {

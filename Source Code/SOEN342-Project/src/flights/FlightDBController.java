@@ -37,68 +37,69 @@ public class FlightDBController {
         boolean isPrivate = false;
 
         while (rs.next()) {
-            Flight flight = new Flight();
-            City destinationCity = new City();
-            Airport sourceAirport = new Airport();
-            Airport destinationAirport = new Airport();
-            Airline airline = new Airline();
-            Aircraft aircraft = new Aircraft();
+            if(source.equals(rs.getString("source_code")) && destination.equals(rs.getString("destination_code"))){
+                Flight flight = new Flight();
+                City destinationCity = new City();
+                Airport sourceAirport = new Airport();
+                Airport destinationAirport = new Airport();
+                Airline airline = new Airline();
+                Aircraft aircraft = new Aircraft();
 
-            // Information about the flight
-            int flightID = rs.getInt("flight_number");
-            String scheduledDepartTime = rs.getString("scheduledDepartTime");
-            String actualDepartTime = rs.getString("actualDepartTime");
-            String scheduledArrivalTime = rs.getString("scheduledArrivalTime");
-            String actualArrivalTime = rs.getString("actualArrivalTime");
+                // Information about the flight
+                int flightID = rs.getInt("flight_number");
+                String scheduledDepartTime = rs.getString("scheduledDepartTime");
+                String actualDepartTime = rs.getString("actualDepartTime");
+                String scheduledArrivalTime = rs.getString("scheduledArrivalTime");
+                String actualArrivalTime = rs.getString("actualArrivalTime");
 
-            flight.setNumber(flightID);
-            flight.setScheduledDepartTime(scheduledDepartTime);
-            flight.setActualDepartTime(actualDepartTime);
-            flight.setScheduledArrivalTime(scheduledArrivalTime);
-            flight.setActualArrivalTime(actualArrivalTime);
+                flight.setNumber(flightID);
+                flight.setScheduledDepartTime(scheduledDepartTime);
+                flight.setActualDepartTime(actualDepartTime);
+                flight.setScheduledArrivalTime(scheduledArrivalTime);
+                flight.setActualArrivalTime(actualArrivalTime);
 
-            // Information about the source and destination airports
-            String sourceAirportCode = rs.getString("source_code");
+                // Information about the source and destination airports
+                String sourceAirportCode = rs.getString("source_code");
 
-            sourceAirport.setCode(sourceAirportCode);
+                sourceAirport.setCode(sourceAirportCode);
 
-            String destAirportCode = rs.getString("destination_code");
-            String destCityName = rs.getString("destination_city_name");
-            int destCityTemp = rs.getInt("destination_temp");
-            String destCountry = rs.getString("city_country");
+                String destAirportCode = rs.getString("destination_code");
+                String destCityName = rs.getString("destination_city_name");
+                int destCityTemp = rs.getInt("destination_temp");
+                String destCountry = rs.getString("city_country");
 
-            destinationAirport.setCode(destAirportCode);
-            destinationCity.setName(destCityName);
-            destinationCity.setTemperature(destCityTemp);
-            destinationCity.setCountry(destCountry);
-            destinationAirport.setCity(destinationCity);
+                destinationAirport.setCode(destAirportCode);
+                destinationCity.setName(destCityName);
+                destinationCity.setTemperature(destCityTemp);
+                destinationCity.setCountry(destCountry);
+                destinationAirport.setCity(destinationCity);
 
-            // Information about the aircraft
-            int aircraftID = rs.getInt("aircraft_id");
-            String aircraftStatus = rs.getString("aircraft_status");
-            int aircraftIsPrivateDB = rs.getInt("is_private");
+                // Information about the aircraft
+                int aircraftID = rs.getInt("aircraft_id");
+                String aircraftStatus = rs.getString("aircraft_status");
+                int aircraftIsPrivateDB = rs.getInt("is_private");
 
-            if (aircraftIsPrivateDB == 0) {
-                isPrivate = false;
-            } else {
-                isPrivate = true;
+                if (aircraftIsPrivateDB == 0) {
+                    isPrivate = false;
+                } else {
+                    isPrivate = true;
+                }
+
+                aircraft.setIdentifier(aircraftID+"");
+                aircraft.setStatus(aircraftStatus);
+                aircraft.setPrivate(isPrivate);
+
+                // Information about the airline
+                String airlineName = rs.getString("airline_name");
+                airline.setName(airlineName);
+
+                flight.setSource(sourceAirport);
+                flight.setDestination(destinationAirport);
+                flight.setAirline(airline);
+                flight.setAircraft(aircraft);
+
+                foundFlights.add(flight);
             }
-
-            aircraft.setIdentifier(aircraftID+"");
-            aircraft.setStatus(aircraftStatus);
-            aircraft.setPrivate(isPrivate);
-
-            // Information about the airline
-            String airlineName = rs.getString("airline_name");
-            airline.setName(airlineName);
-
-            flight.setSource(sourceAirport);
-            flight.setDestination(destinationAirport);
-            flight.setAirline(airline);
-            flight.setAircraft(aircraft);
-
-            foundFlights.add(flight);
-
         }
 
         rs.close();
